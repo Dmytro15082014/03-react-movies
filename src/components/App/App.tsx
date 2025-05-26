@@ -7,11 +7,13 @@ import { getMovies } from "../../services/movieService";
 import MovieGrid from "../MovieGrid/MovieGrid";
 import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import MovieModal from "../MovieModal/MovieModal";
 
 export default function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSearch = async (newQuery: string) => {
     try {
@@ -30,7 +32,13 @@ export default function App() {
       setIsLoading(false);
     }
   };
-  const handleSelect = () => {};
+  const openModal = () => {
+    setIsModalOpen(true);
+    // const getMovieId = (event: React.MouseEvent) => {
+    //   console.log(event.target);
+    // };
+  };
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -38,9 +46,8 @@ export default function App() {
       <SearchBar onSubmit={handleSearch} />
       {isLoading && <Loader />}
       {isError && <ErrorMessage />}
-      {movies.length > 0 && (
-        <MovieGrid onSelect={handleSelect} movies={movies} />
-      )}
+      {movies.length > 0 && <MovieGrid onSelect={openModal} movies={movies} />}
+      {isModalOpen && <MovieModal onClose={closeModal} movie={} />}
     </>
   );
 }
