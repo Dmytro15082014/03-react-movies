@@ -14,7 +14,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [movie, setMovie] = useState<Movie>();
+  const [movie, setMovie] = useState<Movie>(movies[0]);
 
   const handleSearch = async (newQuery: string) => {
     try {
@@ -37,7 +37,7 @@ export default function App() {
   const openModal = (id: number) => {
     setIsModalOpen(true);
     document.body.style.overflow = "hidden";
-    const movieObj: Movie | undefined = movies.find((item) => {
+    const movieObj = movies.find((item) => {
       if (item.id === id) return item;
     });
     setMovie(movieObj);
