@@ -40,7 +40,7 @@ export default function App() {
     const movieObj = movies.find((item) => {
       if (item.id === id) return item;
     });
-    setMovie(movieObj);
+    if (movieObj) setMovie(movieObj);
   };
 
   const closeModal = () => {
