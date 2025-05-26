@@ -1,35 +1,36 @@
-import { useState } from "react";
-import reactLogo from "../../assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.module.css";
+import { useState } from "react";
+import { Movie } from "../../types/movie";
+import toast, { Toaster } from "react-hot-toast";
+import SearchBar from "../SearchBar/SearchBar";
+import { getMovies } from "../../services/movieService";
+import MovieGrid from "../MovieGrid/MovieGrid";
 
-function App() {
-  const [count, setCount] = useState(0);
+export default function App() {
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  const handleSearch = async (newQuery: string) => {
+    try {
+      setMovies([]);
+      const moviesData = await getMovies(newQuery);
+      if (!moviesData.length) {
+        toast.error("No movies found for your request.");
+        return;
+      }
+      setMovies(moviesData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleSelect = () => {};
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Toaster />
+      <SearchBar onSubmit={handleSearch} />
+      {movies.length > 0 && (
+        <MovieGrid onSelect={handleSelect} movies={movies} />
+      )}
     </>
   );
 }
-
-export default App;
