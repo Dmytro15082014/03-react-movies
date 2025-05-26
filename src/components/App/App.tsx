@@ -14,6 +14,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [movie, setMovie] = useState<Movie>();
 
   const handleSearch = async (newQuery: string) => {
     try {
@@ -32,13 +33,20 @@ export default function App() {
       setIsLoading(false);
     }
   };
-  const openModal = () => {
+
+  const openModal = (id: number) => {
     setIsModalOpen(true);
-    // const getMovieId = (event: React.MouseEvent) => {
-    //   console.log(event.target);
-    // };
+    document.body.style.overflow = "hidden";
+    const movieObj: Movie | undefined = movies.find((item) => {
+      if (item.id === id) return item;
+    });
+    setMovie(movieObj);
   };
-  const closeModal = () => setIsModalOpen(false);
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    document.body.style.overflow = "";
+  };
 
   return (
     <>
@@ -47,7 +55,7 @@ export default function App() {
       {isLoading && <Loader />}
       {isError && <ErrorMessage />}
       {movies.length > 0 && <MovieGrid onSelect={openModal} movies={movies} />}
-      {isModalOpen && <MovieModal onClose={closeModal} movie={} />}
+      {isModalOpen && <MovieModal onClose={closeModal} movie={movie} />}
     </>
   );
 }

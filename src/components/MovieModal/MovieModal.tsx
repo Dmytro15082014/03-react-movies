@@ -10,19 +10,21 @@ interface MovieModalProps {
 
 export default function MovieModal({ onClose, movie }: MovieModalProps) {
   const handleBackDropClose = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget) onClose();
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
   };
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Escape") onClose();
+      if (event.code === "Escape") {
+        onClose();
+      }
     };
     document.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = " ";
     };
   }, [onClose]);
 
