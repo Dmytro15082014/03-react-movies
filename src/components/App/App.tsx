@@ -11,10 +11,10 @@ import MovieModal from "../MovieModal/MovieModal";
 
 export default function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [movie, setMovie] = useState<Movie>(movies[0]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [movie, setMovie] = useState<Movie | null>(null);
 
   const handleSearch = async (newQuery: string) => {
     try {
@@ -34,18 +34,14 @@ export default function App() {
     }
   };
 
-  const openModal = (id: number) => {
+  const openModal = (movie: Movie) => {
     setIsModalOpen(true);
-    document.body.style.overflow = "hidden";
-    const movieObj = movies.find((item) => {
-      if (item.id === id) return item;
-    });
-    if (movieObj) setMovie(movieObj);
+    setMovie(movie);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    document.body.style.overflow = "";
+    setMovie(null);
   };
 
   return (
@@ -55,7 +51,9 @@ export default function App() {
       {isLoading && <Loader />}
       {isError && <ErrorMessage />}
       {movies.length > 0 && <MovieGrid onSelect={openModal} movies={movies} />}
-      {isModalOpen && <MovieModal onClose={closeModal} movie={movie} />}
+      {isModalOpen && movie !== null && (
+        <MovieModal onClose={closeModal} movie={movie} />
+      )}
     </>
   );
 }
